@@ -45,51 +45,51 @@ class TestTextNode(unittest.TestCase):
             node.__repr__(), "TextNode(This is a text node, bold, https://zikkas.dev)"
         )
 
-    def test_text_type_node_to_leafnode(self):
+    def test_text_type_node_to_leaf_node(self):
         node = TextNode("This is a test node", text_type_text)
         self.assertEqual(
             text_node_to_html_node(node).__repr__(),
             LeafNode(None, "This is a test node").__repr__(),
         )
 
-    def test_bold_type_node_to_leafnode(self):
+    def test_bold_type_node_to_leaf_node(self):
         node = TextNode("This is a test node", text_type_bold)
         self.assertEqual(
             text_node_to_html_node(node).__repr__(),
             LeafNode("b", "This is a test node").__repr__(),
         )
 
-    def test_code_type_node_to_leafnode(self):
+    def test_code_type_node_to_leaf_node(self):
         node = TextNode("This is a test node", text_type_code)
         self.assertEqual(
             text_node_to_html_node(node).__repr__(),
             LeafNode("code", "This is a test node").__repr__(),
         )
 
-    def test_italic_type_node_to_leafnode(self):
+    def test_italic_type_node_to_leaf_node(self):
         node = TextNode("This is a test node", text_type_italic)
         self.assertEqual(
             text_node_to_html_node(node).__repr__(),
             LeafNode("i", "This is a test node").__repr__(),
         )
 
-    def test_image_type_node_to_leafnode(self):
+    def test_image_type_node_to_leaf_node(self):
         node = TextNode("This is a test image", text_type_image, "https://hello")
         self.assertEqual(
-            text_node_to_html_node(node).__repsr__(),
+            text_node_to_html_node(node).__repr__(),
             LeafNode(
                 "img", None, {"src": "https://hello", "alt": "This is a test image"}
             ).__repr__(),
         )
 
-    def test_link_type_node_to_leafnode(self):
+    def test_link_type_node_to_leaf_node(self):
         node = TextNode("This is a test link", text_type_link, "https://hello")
         self.assertEqual(
             text_node_to_html_node(node).__repr__(),
             LeafNode("a", "This is a test link", {"href": "https://hello"}).__repr__(),
         )
 
-    def test_other_type_node_to_leafnode(self):
+    def test_other_type_node_to_leaf_node(self):
         node = TextNode("This is a test node", "something")
         with self.assertRaisesRegex(ValueError, "invalid text type: something"):
             text_node_to_html_node(node)

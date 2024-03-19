@@ -1,11 +1,11 @@
 from textnode import TextNode
 
-from inline_markdown import split_nodes_delimiter
+from inline_markdown import extract_markdown_images
 
 
 def main():
-    node = TextNode("This is a **text** node", "text")
-    print(split_nodes_delimiter([node], "**", "bold"))
+    text = "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and ![another](https://i.imgur.com/dfsdkjfd.png)"
+    extract_markdown_images(text)
 
 
 if __name__ == "__main__":
