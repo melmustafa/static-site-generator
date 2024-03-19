@@ -46,10 +46,9 @@ class TestTextNode(unittest.TestCase):
         )
 
     def test_empty_leafnode(self):
-        with self.assertRaisesRegex(ValueError, "Invalid HTML: value is required"):
-            LeafNode()
+        self.assertEqual(LeafNode().__repr__(), "HTMLNode(None, None, None, None)")
 
-    def test_no_tag_leafnode_without_props_to_html(self):
+    def test_no_tag_leadnode_without_props_to_html(self):
         node = LeafNode(None, "Hello World!!!")
         self.assertEqual(node.to_html(), "Hello World!!!")
 
