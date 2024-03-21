@@ -1,10 +1,10 @@
 class HTMLNode:
     def __init__(
         self,
-        tag: str = None,
-        value: str = None,
-        children: list = None,
-        props: dict = None,
+        tag: str | None = None,
+        value: str | None = None,
+        children: list | None = None,
+        props: dict | None = None,
     ) -> None:
         self.tag = tag
         self.value = value
@@ -22,12 +22,25 @@ class HTMLNode:
             html_props += f' {attribute}="{self.props[attribute]}"'
         return html_props
 
+    def __eq__(self, __value) -> bool:
+        return (
+            self.tag == __value.tag
+            and self.value == __value.value
+            and self.children == __value.children
+            and self.props == __value.props
+        )
+
     def __repr__(self) -> str:
         return f"HTMLNode({self.tag}, {self.value}, {self.children}, {self.props})"
 
 
 class LeafNode(HTMLNode):
-    def __init__(self, tag: str = None, value: str = None, props: dict = None) -> None:
+    def __init__(
+        self,
+        tag: str | None = None,
+        value: str | None = None,
+        props: dict | None = None,
+    ) -> None:
         super().__init__(tag, value, None, props)
 
     def to_html(self) -> str:
@@ -40,7 +53,10 @@ class LeafNode(HTMLNode):
 
 class ParentNode(HTMLNode):
     def __init__(
-        self, tag: str = None, children: list = None, props: dict = None
+        self,
+        tag: str | None = None,
+        children: list | None = None,
+        props: dict | None = None,
     ) -> None:
         if tag is None:
             raise ValueError("Invalid HTML: tag is required")

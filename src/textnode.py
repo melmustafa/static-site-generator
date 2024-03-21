@@ -20,12 +20,12 @@ TEXT_TYPES = {
 
 
 class TextNode:
-    def __init__(self, text: str, text_type: str, url: str = None):
+    def __init__(self, text: str | None, text_type: str | None, url: str | None = None):
         self.text = text
         self.text_type = text_type
         self.url = url
 
-    def __eq__(self, __value: object) -> bool:
+    def __eq__(self, __value) -> bool:
         return (
             self.text == __value.text
             and self.text_type == __value.text_type
@@ -41,3 +41,4 @@ def text_node_to_html_node(text_node: TextNode) -> LeafNode:
         return TEXT_TYPES[text_node.text_type](text_node)
     except:
         raise ValueError(f"invalid text type: {text_node.text_type}")
+
