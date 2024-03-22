@@ -1,4 +1,6 @@
-from htmlnode import LeafNode, ParentNode
+from htmlnode import ParentNode
+from inline_markdown import text_to_textnodes
+from textnode import text_node_to_html_node
 
 block_type_paragraph = "paragraph"
 block_type_heading = "heading"
@@ -44,41 +46,69 @@ def block_to_block_type(markdown_block: str) -> str:
             block_type = block_type_paragraph
     return block_type
 
-def quote_block_to_html(markdown: str) -> LeafNode:
-    return LeafNode("blockquote", markdown)
+
+def text_to_children(text: str) -> list:
+    children = []
+    text_nodes = text_to_textnodes(text)
+    for node in text_nodes:
+        html_node = text_node_to_html_node(node)
+        children.append(html_node)
+    return children
+
+
+def quote_block_to_html(markdown: str) -> ParentNode:
+    new_lines = []
+    lines = markdown.split("\n")
+    for line in lines:
+        new_lines.append(line.lstrip(" >"))
+    text = " ".join(new_lines)
+    children = text_to_children(text)
+    return ParentNode("blockquote", children)
+
 
 def unordered_list_block_to_html(markdown: str) -> ParentNode:
     nodes = []
     items = markdown.split("\n")
     for item in items:
-        node = LeafNode("li", item.lstrip(" *- "))
+        text = item.lstrip(" *- ")
+        node = ParentNode("li", text_to_children(text))
         nodes.append(node)
     return ParentNode("ul", nodes)
+
 
 def ordered_list_block_to_html(markdown: str) -> ParentNode:
     nodes = []
     items = markdown.split("\n")
     for item in items:
-        node = LeafNode("li", item.lstrip(" 1234567890. "))
+        text = item.lstrip(" 1234567890. ")
+        node = ParentNode("li", text_to_children(text))
         nodes.append(node)
     return ParentNode("ol", nodes)
 
+
 def code_block_to_html(markdown: str) -> ParentNode:
-    code_node = LeafNode("code", markdown)
+    line = " ".join(markdown.lstrip("` ").rstrip(" `").split("\n"))
+    children = text_to_children(line)
+    code_node = ParentNode("code", children)
     return ParentNode("pre", [code_node])
 
-def heading_block_to_html(markdown: str) -> LeafNode:
+
+def heading_block_to_html(markdown: str) -> ParentNode:
     count = 0
     for char in markdown:
-        if char != '#':
+        if char != "#":
             break
         if count == 6:
             break
         count += 1
-    return LeafNode(f"h{count}", markdown.lstrip(" # "))
+    children = text_to_children(markdown.lstrip("# "))
+    return ParentNode(f"h{count}", children)
 
-def paragraph_block_to_html(markdown: str) -> LeafNode:
-    return LeafNode("p", markdown)
+
+def paragraph_block_to_html(markdown: str) -> ParentNode:
+    text = " ".join(markdown.lstrip(" ").rstrip(" ").split("\n"))
+    return ParentNode("p", text_to_children(text))
+
 
 def markdown_to_html(document: str) -> ParentNode:
     blocks = markdown_to_blocks(document)
@@ -92,21 +122,11 @@ def markdown_to_html(document: str) -> ParentNode:
         elif type == block_type_unordered_list:
             node = unordered_list_block_to_html(markdown)
         elif type == block_type_heading:
-            node = heading_block_to_html(markdown )
+            node = heading_block_to_html(markdown)
         elif type == block_type_quote:
             node = quote_block_to_html(markdown)
         else:
             node = paragraph_block_to_html(markdown)
         nodes.append(node)
     return ParentNode("div", nodes)
-
-
-
-
-
-
-
-
-
-
 

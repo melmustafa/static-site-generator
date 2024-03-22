@@ -1,6 +1,5 @@
 import unittest
 
-from htmlnode import LeafNode, ParentNode
 from markdown_block import (block_to_block_type, block_type_code,
                             block_type_heading, block_type_ordered_list,
                             block_type_paragraph, block_type_quote,
@@ -176,45 +175,6 @@ Something
 """
         self.assertEqual(block_to_block_type(markdown), block_type_quote)
 
-    def test_markdown_to_html_with_heading_unordered_list_and_paragraph(self):
-        markdown = """
-
-
-
-# This is a heading
-
-
-
-
-This is a paragraph of text. It has some **bold** and *italic* words inside of it.
-
-
-
-
-* This is a list item
-* This is another list item
-"""
-        result = markdown_to_html(markdown)
-        self.assertEqual(
-            result,
-            ParentNode(
-                "div",
-                [
-                    LeafNode("h1", "This is a heading"),
-                    LeafNode(
-                        "p",
-                        "This is a paragraph of text. It has some **bold** and *italic* words inside of it.",
-                    ),
-                    ParentNode(
-                        "ul",
-                        [
-                            LeafNode("li", "This is a list item"),
-                            LeafNode("li", "This is another list item"),
-                        ],
-                    ),
-                ],
-            ),
-        )
     def test_paragraph(self):
         md = """
 This is **bolded** paragraph
@@ -298,7 +258,9 @@ this is paragraph text
             "<div><blockquote>This is a blockquote block</blockquote><p>this is paragraph text</p></div>",
         )
 
+
 if __name__ == "__main__":
     unittest.main()
+
 
 
