@@ -70,7 +70,7 @@ def unordered_list_block_to_html(markdown: str) -> ParentNode:
     nodes = []
     items = markdown.split("\n")
     for item in items:
-        text = item.lstrip(" *- ")
+        text = item[2:]
         node = ParentNode("li", text_to_children(text))
         nodes.append(node)
     return ParentNode("ul", nodes)
@@ -87,7 +87,7 @@ def ordered_list_block_to_html(markdown: str) -> ParentNode:
 
 
 def code_block_to_html(markdown: str) -> ParentNode:
-    line = " ".join(markdown.lstrip("` ").rstrip(" `").split("\n"))
+    line = markdown.lstrip("` \n").rstrip(" `\n")
     children = text_to_children(line)
     code_node = ParentNode("code", children)
     return ParentNode("pre", [code_node])
@@ -111,7 +111,7 @@ def paragraph_block_to_html(markdown: str) -> ParentNode:
 
 
 def markdown_to_html(document: str) -> ParentNode:
-    blocks = markdown_to_blocks(document)
+    blocks = markdown_to_blocks(document.lstrip("\n "))
     nodes = []
     for markdown in blocks:
         type = block_to_block_type(markdown)
@@ -129,4 +129,3 @@ def markdown_to_html(document: str) -> ParentNode:
             node = paragraph_block_to_html(markdown)
         nodes.append(node)
     return ParentNode("div", nodes)
-

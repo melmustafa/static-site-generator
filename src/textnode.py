@@ -14,7 +14,7 @@ TEXT_TYPES = {
     text_type_code: lambda node: LeafNode("code", node.text),
     text_type_link: lambda node: LeafNode("a", node.text, {"href": node.url}),
     text_type_image: lambda node: LeafNode(
-        "img", None, {"src": node.url, "alt": node.text}
+        "img", "", {"src": node.url, "alt": node.text}
     ),
 }
 
@@ -41,4 +41,3 @@ def text_node_to_html_node(text_node: TextNode) -> LeafNode:
         return TEXT_TYPES[text_node.text_type](text_node)
     except:
         raise ValueError(f"invalid text type: {text_node.text_type}")
-
